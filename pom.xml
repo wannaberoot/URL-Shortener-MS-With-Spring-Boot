@@ -9,8 +9,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>URL-Shortener-With-Spring-Boot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>url-shortener</artifactId>
+    <version>0.0.1</version>
     <name>URL-Shortener-With-Spring-Boot</name>
     <description>URL-Shortener-With-Spring-Boot</description>
     <properties>
