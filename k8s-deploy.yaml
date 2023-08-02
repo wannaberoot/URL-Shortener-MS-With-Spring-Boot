@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: url-shortener
+  name: url-shortener
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: url-shortener
+  template:
+    metadata:
+      labels:
+        app: url-shortener
+    spec:
+      containers:
+        - name: url-shortener
+          image: 300795597773.dkr.ecr.us-east-2.amazonaws.com/ecr-url-shortener-repository
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8090
+              name: http
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: url-shortener
+    k8s-app: url-shortener
+  name: url-shortener
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8090
+  type: LoadBalancer
+  selector:
+    app: url-shortener
