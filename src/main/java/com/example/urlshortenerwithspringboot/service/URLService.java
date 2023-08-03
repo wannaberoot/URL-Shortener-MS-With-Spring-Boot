@@ -47,7 +47,8 @@ public class URLService {
 
     @Transactional
     public String redirect(final String shortURL) throws MSException {
-        Long originalURLId = base62ToBase10(shortURL);
+        String base62Part = shortURL.substring(shortURL.length() - 8);
+        Long originalURLId = base62ToBase10(base62Part);
         Optional<URL> optionalURL = urlRepository.findById(originalURLId);
         if (optionalURL.isEmpty()) {
             throw new MSException(MSExceptionEnum.URL_NOT_FOUND.getErrorCode(), MSExceptionEnum.URL_NOT_FOUND.getErrorMessage(), shortURL);
@@ -124,6 +125,7 @@ public class URLService {
         while (sb.length() != 8) {
             sb.insert(0, '0');
         }
+        sb.insert(0, URLConstants.ROOT_URL);
         return sb.toString();
     }
 }
