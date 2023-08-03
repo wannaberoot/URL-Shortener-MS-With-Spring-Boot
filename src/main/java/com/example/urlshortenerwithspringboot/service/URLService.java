@@ -78,6 +78,9 @@ public class URLService {
         if (optionalURL.isEmpty()) {
             throw new MSException(MSExceptionEnum.URL_NOT_FOUND.getErrorCode(), MSExceptionEnum.URL_NOT_FOUND.getErrorMessage(), id);
         }
+        if (optionalURL.get().getUser() != userService.getUser(username).get()) {
+            throw new MSException(MSExceptionEnum.NOT_AUTHORIZED.getErrorCode(), MSExceptionEnum.NOT_AUTHORIZED.getErrorMessage(), username);
+        }
         urlRepository.deleteById(optionalURL.get().getId());
     }
 
