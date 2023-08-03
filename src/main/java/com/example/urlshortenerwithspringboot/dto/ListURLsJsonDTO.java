@@ -3,7 +3,6 @@ package com.example.urlshortenerwithspringboot.dto;
 import com.example.urlshortenerwithspringboot.model.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;

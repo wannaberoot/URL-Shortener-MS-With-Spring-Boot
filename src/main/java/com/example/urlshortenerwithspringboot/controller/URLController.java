@@ -46,9 +46,9 @@ public class URLController {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))})
     @PostMapping(URLConstants.USER_PATH + URLConstants.USERNAME_PATH + URLConstants.URL_PATH)
     public ResponseEntity<URLJsonDTO> createShortURL(@PathVariable final String username, @Valid @RequestBody final CreateShortURLRequest createShortURLRequest) throws MSException {
-        log.debug(String.format("Create short URL request received with long URL: %s", createShortURLRequest.getLongURL()));
+        log.info(String.format("Create short URL request received with long URL: %s", createShortURLRequest.getLongURL()));
         final URLJsonDTO urlJsonDTO = urlService.createShortURL(username, createShortURLRequest);
-        log.debug(String.format("Short URL has been created with id: %s", urlJsonDTO.getId()));
+        log.info(String.format("Short URL has been created with id: %s", urlJsonDTO.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(urlJsonDTO);
     }
 
@@ -59,11 +59,11 @@ public class URLController {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))})
     @GetMapping(URLConstants.SHORT_URL_PATH)
     public RedirectView redirect(@PathVariable final String shortURL) throws MSException {
-        log.debug(String.format("Redirect short URL request received with short URL: %s", shortURL));
+        log.info(String.format("Redirect short URL request received with short URL: %s", shortURL));
         final String originalURL = urlService.redirect(shortURL);
-        log.debug(String.format("Short URL has been redirected with originalURL URL: %s", originalURL));
+        log.info(String.format("Short URL has been redirected with originalURL URL: %s", originalURL));
         RedirectView redirectView = new RedirectView();
-        redirectView.setStatusCode(HttpStatus.FOUND);
+        redirectView.setStatusCode(HttpStatus.TEMPORARY_REDIRECT);
         redirectView.setUrl(originalURL);
         return redirectView;
     }
@@ -76,9 +76,9 @@ public class URLController {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))})
     @GetMapping(URLConstants.USER_PATH + URLConstants.USERNAME_PATH + URLConstants.URL_PATH)
     public ResponseEntity<ListURLsJsonDTO> listShortURLs(@PathVariable final String username) throws MSException {
-        log.debug(String.format("List short URL request received with username: %s", username));
+        log.info(String.format("List short URL request received with username: %s", username));
         final ListURLsJsonDTO listURLsJsonDTO = urlService.listShortURLs(username);
-        log.debug(String.format("Short URLs have been listed with username: %s", username));
+        log.info(String.format("Short URLs have been listed with username: %s", username));
         return ResponseEntity.status(HttpStatus.OK).body(listURLsJsonDTO);
     }
 
@@ -89,9 +89,9 @@ public class URLController {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))})
     @DeleteMapping(URLConstants.USER_PATH + URLConstants.USERNAME_PATH + URLConstants.URL_PATH + URLConstants.ID_PATH)
     public ResponseEntity<?> terminateShortURL(@PathVariable final String username, @PathVariable final String id) throws MSException {
-        log.debug(String.format("Delete short URL request received with id: %s", id));
+        log.info(String.format("Delete short URL request received with id: %s", id));
         urlService.terminateShortURL(username, id);
-        log.debug(String.format("Short URL has been deleted with id: %s", id));
+        log.info(String.format("Short URL has been deleted with id: %s", id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }

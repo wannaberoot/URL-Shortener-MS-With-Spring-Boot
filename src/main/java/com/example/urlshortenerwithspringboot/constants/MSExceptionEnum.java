@@ -6,7 +6,8 @@ public enum MSExceptionEnum {
     USER_NOT_FOUND("MS-002", "User not found!"),
     URL_NOT_FOUND("MS-003", "URL not found!"),
     USER_HAS_NO_URL("MS-004", "User has no URLs!"),
-    INVALID_INPUT("MS-005", "Invalid input!");
+    NOT_AUTHORIZED("MS-005", "You are not authorized to perform this action!"),
+    INVALID_INPUT("MS-006", "Invalid input!");
 
     private String errorCode;
     private String errorMessage;

@@ -43,9 +43,9 @@ public class UserController {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))})
     @PostMapping(URLConstants.USER_PATH)
     public ResponseEntity<UserJsonDTO> createUser(@Valid @RequestBody final CreateUserRequest createUserRequest) throws MSException {
-        log.debug(String.format("Create user request received with username: %s", createUserRequest.getUsername()));
+        log.info(String.format("Create user request received with username: %s", createUserRequest.getUsername()));
         UserJsonDTO userJsonDTO = userService.createUser(createUserRequest);
-        log.debug(String.format("User has been created with id: %s", userJsonDTO.getId()));
+        log.info(String.format("User has been created with id: %s", userJsonDTO.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userJsonDTO);
 
     }
@@ -57,9 +57,9 @@ public class UserController {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))})
     @DeleteMapping(URLConstants.USER_PATH + URLConstants.USERNAME_PATH)
     public ResponseEntity<?> deleteUser(@PathVariable final String username) throws MSException {
-        log.debug(String.format("Delete user request received with username: %s", username));
+        log.info(String.format("Delete user request received with username: %s", username));
         userService.deleteUser(username);
-        log.debug(String.format("User has been deleted for username: %s", username));
+        log.info(String.format("User has been deleted for username: %s", username));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }
