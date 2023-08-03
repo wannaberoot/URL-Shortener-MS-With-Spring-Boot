@@ -16,8 +16,19 @@ spec:
     spec:
       containers:
         - name: url-shortener
-          image: 300795597773.dkr.ecr.us-east-2.amazonaws.com/ecr-url-shortener-repository
+          image: 300795597773.dkr.ecr.us-east-2.amazonaws.com/ecr-url-shortener-repository:latest
           imagePullPolicy: Always
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: password
           ports:
             - containerPort: 8090
               name: http
