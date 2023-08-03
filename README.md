@@ -10,6 +10,7 @@ An URL shortener is a website that reduces the length of your URL. The idea is t
 3. Jackson JSON
 4. JUnit - Mockito
 5. Lombok
+6. Slf4j
 
 ## How to Run?
 You can create a docker image using Dockerfile and run the application as container.

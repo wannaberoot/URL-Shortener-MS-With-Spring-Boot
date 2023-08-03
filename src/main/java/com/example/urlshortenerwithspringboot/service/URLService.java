@@ -29,9 +29,10 @@ public class URLService {
 
     @Transactional
     public URLJsonDTO createShortURL(final String username, final CreateShortURLRequest createShortURLRequest) throws MSException {
-        log.debug("Short URL is being created.");
+        log.debug("Short URL is being created for username: %s", username);
         Optional<User> optionalUser = userService.getUser(username);
         if (optionalUser.isEmpty()) {
+            log.debug("User not found for username: %s", username);
             throw new MSException(MSExceptionEnum.USER_NOT_FOUND.getErrorCode(), MSExceptionEnum.USER_NOT_FOUND.getErrorMessage(), username);
         }
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -47,22 +48,27 @@ public class URLService {
 
     @Transactional
     public String redirect(final String shortURL) throws MSException {
+        log.debug("Redirecting to original URL with short URL: %s", shortURL);
         String base62Part = shortURL.substring(shortURL.length() - 8);
         Long originalURLId = base62ToBase10(base62Part);
         Optional<URL> optionalURL = urlRepository.findById(originalURLId);
         if (optionalURL.isEmpty()) {
+            log.debug("URL not found for short URL: %s", shortURL);
             throw new MSException(MSExceptionEnum.URL_NOT_FOUND.getErrorCode(), MSExceptionEnum.URL_NOT_FOUND.getErrorMessage(), shortURL);
         }
         return optionalURL.get().getOriginalURL();
     }
 
     public ListURLsJsonDTO listShortURLs(final String username) throws MSException {
+        log.debug("Short URLs is being listed for username: %s", username);
         Optional<User> optionalUser = userService.getUser(username);
         if (optionalUser.isEmpty()) {
+            log.debug("User not found for username: %s", username);
             throw new MSException(MSExceptionEnum.USER_NOT_FOUND.getErrorCode(), MSExceptionEnum.USER_NOT_FOUND.getErrorMessage(), username);
         }
         Optional<List<URL>> optionalURLs = urlRepository.findAllByUser(optionalUser.get());
-        if (optionalURLs.isEmpty()) {
+        if (optionalURLs.get().isEmpty()) {
+            log.debug("User has no URL for username: %s", username);
             throw new MSException(MSExceptionEnum.USER_HAS_NO_URL.getErrorCode(), MSExceptionEnum.USER_HAS_NO_URL.getErrorMessage(), username);
         }
         List<URLJsonDTO> urlJsonDTOList = new ArrayList<>();
@@ -76,9 +82,11 @@ public class URLService {
     public void terminateShortURL(final String username, final String id) throws MSException {
         Optional<URL> optionalURL = getURL(username, id);
         if (optionalURL.isEmpty()) {
+            log.debug("URL not found for id: %s", id);
             throw new MSException(MSExceptionEnum.URL_NOT_FOUND.getErrorCode(), MSExceptionEnum.URL_NOT_FOUND.getErrorMessage(), id);
         }
         if (optionalURL.get().getUser() != userService.getUser(username).get()) {
+            log.debug("User not authorized for username: %s", username);
             throw new MSException(MSExceptionEnum.NOT_AUTHORIZED.getErrorCode(), MSExceptionEnum.NOT_AUTHORIZED.getErrorMessage(), username);
         }
         urlRepository.deleteById(optionalURL.get().getId());
@@ -87,6 +95,7 @@ public class URLService {
     private Optional<URL> getURL(final String username, final String id) throws MSException {
         Optional<User> optionalUser = userService.getUser(username);
         if (optionalUser.isEmpty()) {
+            log.debug("User not found for username: %s", username);
             throw new MSException(MSExceptionEnum.USER_NOT_FOUND.getErrorCode(), MSExceptionEnum.USER_NOT_FOUND.getErrorMessage(), username);
         }
         return urlRepository.findByIdAndUser(Long.parseLong(id), optionalUser.get());
