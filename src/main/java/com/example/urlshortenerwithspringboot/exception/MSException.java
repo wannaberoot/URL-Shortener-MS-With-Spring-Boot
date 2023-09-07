@@ -2,7 +2,7 @@ package com.example.urlshortenerwithspringboot.exception;
 
 import java.io.Serial;
 
-public class MSException extends Exception{
+public class MSException extends Exception {
 
     @Serial
     private static final long serialVersionUID = 7802902689856437055L;
